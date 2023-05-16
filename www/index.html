@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <title>INICIO</title>
+    <!-- Agregar Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        background: url("img/imagen\ de\ fondo.jpeg");
+        background-size: cover;
+        color: #000000;
+      }
+
+      .btn {
+        padding: 1rem 2rem;
+      }
+      footer {
+        margin-top: 12rem;
+      }
+      table {
+        width: 100%;
+      }
+      .indicador-carga {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+        z-index: 9999;
+        display: none;
+      }
+
+      .circulo {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 40px;
+        border: 4px solid #fff;
+        border-top-color: #777;
+        border-radius: 50%;
+        animation: girar 1s infinite linear;
+      }
+
+      @keyframes girar {
+        from {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+        to {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="container d-flex align-items-center justify-content-center"
+      style=""
+    >
+      <div
+        style="
+          padding: 5rem;
+          border-radius: 15px;
+          box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.14),
+            0 3px 4px 0 rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+        "
+        class="card text-center mt-5"
+      >
+        <h2 style="">Bienvenido</h2>
+        <div id="indicadorCarga" class="indicador-carga">
+          <div class="circulo"></div>
+        </div>
+
+        <div class="profile-picture py-5"></div>
+        <a
+          id="scanButton"
+          style="background-color: #2490a1; border-radius: 1rem"
+          class="btn btn-primary btn-lg text-center px-3"
+          >Escanea el QR aqui</a
+        >
+      </div>
+    </div>
+
+    <div
+      class="col-10 text-center mx-auto p-0 mt-5"
+      style="border: 2px solid black; border-radius: 10px"
+    >
+      <div
+        class="d-flex align-items-center justify-content-center"
+        style="
+          height: 80px;
+          border-bottom: 2px solid black;
+          background-color: #2490a1;
+        "
+      >
+        <h2 style="margin-top: 0.5rem !important">Últimos accesos</h2>
+      </div>
+      <div>
+        <table style="border-radius: 20px !important" class="table-light">
+          <thead
+            style="
+              height: 60px;
+              border-bottom: 1px solid black;
+              background-color: #a5d1d8;
+            "
+          >
+            <tr>
+              <th>Dia</th>
+              <th>Horario</th>
+              <th>Tipo</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <!-- Agregar Bootstrap JS -->
+    <script src="js/index.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <footer class="py-3 bg-transparent">
+      <div
+        style="font-size: 1.5rem; margin-top: -25px"
+        class="container text-center"
+      >
+        © MCE 2023 Developed & Design by I+D
+      </div>
+    </footer>
+    <script src="cordova.js"></script>
+    <script>
+    window.onload = function() {
+  if (history.state && history.state.fromBack) {
+    alert("Esta página fue cargada desde history.back()");
+  }
+};
+
+      document
+        .getElementById("scanButton")
+        .addEventListener("click", function () {
+          cordova.plugins.barcodeScanner.scan(
+            function (result) {
+              document.getElementById("indicadorCarga").style.display = "block";
+              var storedUserId = localStorage.getItem("userId");
+              window.location.href = result.text + "&id=" + storedUserId;
+              if (result.cancelled) {
+                window.location.href = "home.html";
+              }
+            },
+            function (error) {
+              alert("Scanning failed: " + error);
+            }
+          );
+        });
+      var storedUserId = localStorage.getItem("userId");
+      fetch(
+        "https://api.redvalor-desarrollo.com/eureka/lastregist.php?id=" +
+          storedUserId
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          const table = document.querySelector("table");
+
+          data.forEach((entry) => {
+            const tr = document.createElement("tr");
+            tr.style.height = "60px";
+            tr.style.borderBottom = "1px solid black";
+
+            const td1 = document.createElement("td");
+            td1.textContent = entry.dia;
+            const td2 = document.createElement("td");
+            td2.textContent = entry.hora;
+            const td3 = document.createElement("td");
+            td3.textContent = entry.tipo;
+
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            tr.appendChild(td3);
+            table.appendChild(tr);
+          });
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    </script>
+  </body>
+</html>

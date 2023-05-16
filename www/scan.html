@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Escanea el QR</title>
+    <style>
+        .container{
+            margin-top: 35rem;
+        }
+      body {
+       
+        font-family: Arial, sans-serif;
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin-top: 2rem;
+      }
+
+      .btn {
+        font-size: 1.5rem;
+        padding: 1rem 2rem;
+        border-radius: 1rem;
+        background-color: #2490a1;
+        color: #ffffff;
+        border: none;
+        box-shadow: 2px 2px 5px #cccccc;
+        transition: all 0.2s ease-in-out;
+      }
+
+      .btn:hover {
+        background-color: #0d728e;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <center>
+        <h1>Escanea el QR</h1>
+      </center>
+     
+          <center>
+            <a
+                id="scanButton"
+                style="
+                  
+                "
+                class="btn btn-primary btn-lg"
+                >Escanea el QR aqui</a
+              >
+            <a href="./index.html" id="volver" class="btn btn-lg btn-block mt-5" style="background-color: red !important;">Volver</a>
+          </center>
+        
+      </div>
+    </div>
+    <script src="cordova.js"></script>
+    <script src="js/index.js"></script>
+    
+  </body>
+</html>
